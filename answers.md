@@ -1,3 +1,7 @@
+# web_scrape_assessment repo
+ webscraping system that extracts retail data to analyze
+
+
 
 # Assesment answers and notes:
 
