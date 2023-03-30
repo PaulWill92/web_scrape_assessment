@@ -4,7 +4,8 @@ from bs4 import BeautifulSoup
 import requests
 import yaml
 import ast
-# Use config file to generate run process this is a good way to automate processes
+
+# Use the config.yaml file to generate run process this is a good way to automate processes
 
 
 
@@ -115,7 +116,11 @@ class ProductExtract:
     #     return [website + link.get("href").replace(" ", url_space_delim) for link in links]
     
     def product_link_extractor(self, soup, link_selector, website, url_space_delim):
+        """
         
+        extracts urls from a soup object using a link_selector defined by user in the config.yaml file
+        
+        """
         # soup would be a dict that looks like this {"page_type": "soup"} product listing page type will always hold product links so this is hardcoded
         link_container = soup.select(link_selector)
         links = []
@@ -126,7 +131,11 @@ class ProductExtract:
         return links
     
     def quick_soup(self, product_urls_dict, header=None):
-            
+        """
+        
+        creates a soup object for product listing pages and above in hierarchy so that they can be used to loop and find links.
+        
+        """
         # quick soup = proudct listing page info that can be extracted fast
         # urls = urls stored on product listing pages
 
@@ -172,6 +181,14 @@ class ProductExtract:
     
     
     def extract_product_data(self, url_list, header=None):
+        
+        """
+        
+        extracts product data from list of product urls and creates user defined dataframe object.
+        
+        """
+        
+        
         product_data = []
         for url in url_list:
             try:
@@ -205,7 +222,7 @@ class ProductExtract:
 
 
 
-# I Would normally import class in separate script to run process but to keep everything in one file and to save time I will run the processes just below:
+# I Would normally import class into a separate python script to run process but to keep everything in one file and to save time I will run the processes just below:
 # I Would also normally create a transformation script to clean all the data but I will also do my data transforms here:
 # amazon:
 amazon_header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"}
@@ -244,6 +261,7 @@ smythstoys_quick_soup = smythstoys.quick_soup(smythstoys.prod_urls, header=smyth
 
 # to improve given more time:
 # an automative way to rotate user agents
+# bash script that loads the config files from the config folder to automate the process
 # Extract Load pipeline into a postgresql database
 # a transformation layer script on its own.
 # make it crawl through multiple pages (to note: some pages use java script so would have to integrate selenium headless fetcher to get this to work on both)
