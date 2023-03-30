@@ -1,0 +1,24 @@
+# designed so we understand what region we are scraping in, and allowing for a list of products for multi scraping capabilities.
+customer_name: argos
+customer_region: uk
+website: https://www.argos.co.uk
+scrape_count: 1 # one page for now future to allow multiple
+list_of_products:
+  - jurassic world toys
+example_url: 
+  Product_list_page: https://www.argos.co.uk/search/{}/
+url_space_delim: "-"
+sel_fetch: False
+scrape_params:
+  name : '#content > main > div:nth-child(2) > div.xs-block > div:nth-child(1) > section.xs-12--none.md-7.xl-8.pdp-core.bolt-v2 > div.Namestyles__ProductName-sc-269llv-0.kEQsqD.bolt-v2 > h1'
+  price : '#content > main > div:nth-child(2) > div.xs-block > div:nth-child(1) > section.xs-12--none.md-5--none.xl-4--none.pdp-right > section > ul > li'
+  brand : '#pdp-description > div > p:nth-child(3)'
+  # instock : ''
+  product_bar_code : '#pdp-description > div > ul:nth-child(8) > li:nth-child(2)'
+  # customer_rating : ''
+  # rating_count : ''
+  product_link_container : '#findability > div.search > div > div.styles__Container-sc-1h5mbdb-0.bCQCYQ.xs-12--none.lg-9--none.xs-stack > div:nth-child(4) > div:nth-child(1) > div'
+  product_link_selector : '#findability > div.search > div > div.styles__Container-sc-1h5mbdb-0.bCQCYQ.xs-12--none.lg-9--none.xs-stack > div:nth-child(4) > div:nth-child(1) > div'
+
+
+

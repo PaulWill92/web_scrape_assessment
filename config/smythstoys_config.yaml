@@ -1,0 +1,21 @@
+# designed so we understand what region we are scraping in, and allowing for a list of products for multi scraping capabilities.
+# USER agents blocked : need to create a way to rotate agents:
+customer_name: smythstoys
+customer_region: uk
+website: https://www.smythstoys.com
+scrape_count: 1 # one page for now future to allow multiple
+list_of_products:
+  - jurassic world toys
+example_url: 
+  Product_list_page: https://www.smythstoys.com/uk/en-gb/brand/jurassic-world/c/SM060614
+url_space_delim: "-"
+sel_fetch: False
+scrape_params:
+  name : ''
+  price : ''
+  brand : ''
+  instock : ''
+  product_bar_code : ''
+  customer_rating : ''
+  rating_count : ''
+  product_link_selector : ''

@@ -1,0 +1,23 @@
+customer_name: amazon
+customer_region: uk
+website: https://www.amazon.co.uk
+scrape_count: 1 # one page for now future to allow multiple
+list_of_products:
+  - jurassic world toys
+example_url: 
+  Product_list_page: https://www.amazon.co.uk/s?k={}
+url_space_delim: "+"
+sel_fetch: False
+# for now very specific selectors but can be updated in the future to allow for looping containers.
+scrape_params:
+  name : '#title'
+  price : '#corePrice_feature_div > div'
+  brand : '#bylineInfo_feature_div > div'
+  instock : '#availability'
+  product_bar_code : '#productDetails_techSpec_section_1 > tbody > tr:nth-child(14)'
+  customer_rating : '#acrPopover'
+  rating_count : '#acrCustomerReviewText'
+  # product_link_selector : "'a', {'class': 'a-link-normal s-no-outline'}" # automating a way to construct this in the future would be useful for now I manually added this
+  # product_link_selector : '#search > div.s-desktop-width-max.s-desktop-content.s-wide-grid-style-t1.s-opposite-dir.s-wide-grid-style.sg-row > div.sg-col-20-of-24.s-matching-dir.sg-col-16-of-20.sg-col.sg-col-8-of-12.sg-col-12-of-16 > div > span.rush-component.s-latency-cf-section > div.s-main-slot.s-result-list.s-search-results.sg-row > div:nth-child(4) > div'
+  product_link_selector : '.a-link-normal.s-no-outline'
+  
