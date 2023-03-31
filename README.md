@@ -35,7 +35,7 @@ I planed on adding selenium functionality into the scraping system but due to ti
 
 1. Are there any individual products that are listed across the 3 sites? If so, please provide a list with links to each site. 
     
-    - Using the EAN and other variant of the number was not reliable. Amazon for instance, uses the ASIN to identify products so I was not able to make a join between these tables as there was not an equivalent data point to join on. 
+    - Using the EAN and other variant of the number was not reliable. Amazon for instance, uses the ASIN to identify products so I was not able to make a join between these tables as there was not an equivalent data point to join on. In the future I would have used an ASIN to EAN converter.
     - Argos and Smythstoys both had EAN numbers but within the scope of my argos data (10 records) I found no products that shared links across multiple sites. If I was to do this again and have more time, I would scrape a large multipage data set from argos and to truly zero in on product names I could also use string manipulation to create search terms of products on each site in order to ensure that cross site products exist.
 
 2. Which brands/manufacturers are associated to the products?
