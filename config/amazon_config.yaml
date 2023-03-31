@@ -14,7 +14,7 @@ scrape_params:
   price : '#corePrice_feature_div > div'
   brand : '#bylineInfo_feature_div > div'
   instock : '#availability'
-  product_bar_code : '#productDetails_techSpec_section_1 > tbody > tr:nth-child(14)'
+  product_bar_code : '#productDetails_detailBullets_sections1 span:nth-child(2)'
   customer_rating : '#acrPopover'
   rating_count : '#acrCustomerReviewText'
   # product_link_selector : "'a', {'class': 'a-link-normal s-no-outline'}" # automating a way to construct this in the future would be useful for now I manually added this
