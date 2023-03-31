@@ -251,9 +251,9 @@ argos_product_data = pd.DataFrame(argos.extract_product_data(argos_product_links
 argos_product_data.to_csv("../data/jurassic_argos_products.csv")
 
 # smythstoys
-smythstoys_header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36"}
-smythstoys = ProductExtract(filename="../config/smythstoys_config.yaml")
-smythstoys_quick_soup = smythstoys.quick_soup(smythstoys.prod_urls, header=smythstoys_header)
+# smythstoys_header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36"}
+# smythstoys = ProductExtract(filename="../config/smythstoys_config.yaml")
+# smythstoys_quick_soup = smythstoys.quick_soup(smythstoys.prod_urls, header=smythstoys_header)
 
 
 
