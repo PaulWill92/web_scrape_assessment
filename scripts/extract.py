@@ -139,21 +139,21 @@ class ProductExtract:
         # quick soup = proudct listing page info that can be extracted fast
         # urls = urls stored on product listing pages
 
-            if self.is_selenium == False:
-                soup_holder = []
-                quick_soup = {}
-                product_urls_list = []
-                for category, product in product_urls_dict.items():
-                    soup_list = []
-                    for url in product:
-                        response = requests.get(url, headers=header)
-                        soup_list.append(BeautifulSoup(response.content, 'html.parser'))
-                    quick_soup[category] = soup_list
-                    
-                return quick_soup
+        if self.is_selenium == False:
+            soup_holder = []
+            quick_soup = {}
+            product_urls_list = []
+            for category, product in product_urls_dict.items():
+                soup_list = []
+                for url in product:
+                    response = requests.get(url, headers=header)
+                    soup_list.append(BeautifulSoup(response.content, 'html.parser'))
+                quick_soup[category] = soup_list
+                
+            return quick_soup
 
-            else:
-                print("WARNING: using the selenium fetcher so cant view a quick soup!")
+        else:
+            print("WARNING: using the selenium fetcher so cant view a quick soup!")
     
     
     def extract_info_from_selector(self, soup, selector):
@@ -199,7 +199,7 @@ class ProductExtract:
                 product_price = soup.select_one(self.scrape_params["price"]).get_text(strip=True) if 'price' in self.scrape_params else None
                 product_brand = soup.select_one(self.scrape_params["brand"]).get_text(strip=True) if 'brand' in self.scrape_params else None
                 product_instock = soup.select_one(self.scrape_params["instock"]).get_text(strip=True) if 'instock' in self.scrape_params else None
-                # product_bar_code = soup.select_one(self.scrape_params["product_bar_code"]).get_text(strip=True) if 'product_bar_code' in self.scrape_params else None
+                product_bar_code = soup.select_one(self.scrape_params["product_bar_code"]).get_text(strip=True) if 'product_bar_code' in self.scrape_params else None
                 product_rating = soup.select_one(self.scrape_params["customer_rating"]).get_text(strip=True) if 'customer_rating' in self.scrape_params else None
                 product_rating_count = soup.select_one(self.scrape_params["rating_count"]).get_text(strip=True) if 'rating_count' in self.scrape_params else None
                 
@@ -207,53 +207,54 @@ class ProductExtract:
                                     'price': product_price, 
                                     'brand': product_brand,
                                     'instock': product_instock, 
-                                    #  'identifcation_number': product_bar_code,
+                                     'identifcation_number': product_bar_code,
                                     'rating': product_rating,
                                     'rating_count':product_rating_count})
             except AttributeError:
                 print(f"WARNING: skipping {url} due to NoneType object attribute")
 
         return product_data
-    
+
+def main():
+    # I Would normally import class into a separate python script to run process but to keep everything in one file and to save time I will run the processes just below:
+    # I Would also normally create a transformation script to clean all the data but I will also do my data transforms here:
+    # amazon:
+    amazon_header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"}
+    amazon = ProductExtract(filename="../config/amazon_config.yaml")
+    amazon_quick_soup = amazon.quick_soup(amazon.prod_urls, header=amazon_header)
+    # amazon_product_links= amazon.product_link_extractor(amazon_quick_soup["Product_list_page"][0], amazon.scrape_params["product_link_selector"], amazon.website, amazon.url_space_delim)
+    amazon_link_container = amazon_quick_soup["Product_list_page"][0].select(amazon.scrape_params["product_link_selector"])
+    amazon_product_links = [amazon.website+link["href"].replace(" ", amazon.url_space_delim) for link in amazon_link_container]
+    # extract product data:
+    amazon_product_data = pd.DataFrame(amazon.extract_product_data(amazon_product_links, amazon_header))
+    amazon_product_data.to_csv("../data/jurassic_amazon_products.csv")
+
+    # argos:
+    argos_header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}
+    argos = ProductExtract(filename="../config/argos_config.yaml")
+    argos_quick_soup= argos.quick_soup(argos.prod_urls, header=argos_header)
+    argos_product_links = argos.product_link_extractor(argos_quick_soup["Product_list_page"][0], argos.scrape_params["product_link_container"], argos.website, argos.url_space_delim)
+    # clean unneeded links:
+    argos_product_links_clean = []
+    for link in argos_product_links:
+        if argos.list_of_products[0].replace(" ", argos.url_space_delim) in link:
+            argos_product_links_clean.append(link)
+        else:
+            print(f"{link} not a product link")
+    argos_product_data = pd.DataFrame(argos.extract_product_data(argos_product_links_clean, argos_header))
+    argos_product_data.to_csv("../data/jurassic_argos_products.csv")
+
+    # smythstoys
+    # smythstoys_header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36"}
+    # smythstoys = ProductExtract(filename="../config/smythstoys_config.yaml")
+    # smythstoys_quick_soup = smythstoys.quick_soup(smythstoys.prod_urls, header=smythstoys_header)
 
 
 
 
+if __name__ == "__main__":
+    main()
 
-
-
-# I Would normally import class into a separate python script to run process but to keep everything in one file and to save time I will run the processes just below:
-# I Would also normally create a transformation script to clean all the data but I will also do my data transforms here:
-# amazon:
-amazon_header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"}
-amazon = ProductExtract(filename="../config/amazon_config.yaml")
-amazon_quick_soup = amazon.quick_soup(amazon.prod_urls, header=amazon_header)
-# amazon_product_links= amazon.product_link_extractor(amazon_quick_soup["Product_list_page"][0], amazon.scrape_params["product_link_selector"], amazon.website, amazon.url_space_delim)
-amazon_link_container = amazon_quick_soup["Product_list_page"][0].select(amazon.scrape_params["product_link_selector"])
-amazon_product_links = [amazon.website+link["href"].replace(" ", amazon.url_space_delim) for link in amazon_link_container]
-# extract product data:
-amazon_product_data = pd.DataFrame(amazon.extract_product_data(amazon_product_links, amazon_header))
-amazon_product_data.to_csv("../data/jurassic_amazon_products.csv")
-
-# argos:
-argos_header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}
-argos = ProductExtract(filename="../config/argos_config.yaml")
-argos_quick_soup= argos.quick_soup(argos.prod_urls, header=argos_header)
-argos_product_links = argos.product_link_extractor(argos_quick_soup["Product_list_page"][0], argos.scrape_params["product_link_container"], argos.website, argos.url_space_delim)
-# clean unneeded links:
-argos_product_links_clean = []
-for link in argos_product_links:
-    if argos.list_of_products[0].replace(" ", argos.url_space_delim) in link:
-        argos_product_links_clean.append(link)
-    else:
-        print(f"{link} not a product link")
-argos_product_data = pd.DataFrame(argos.extract_product_data(argos_product_links_clean, argos_header))
-argos_product_data.to_csv("../data/jurassic_argos_products.csv")
-
-# smythstoys
-# smythstoys_header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36"}
-# smythstoys = ProductExtract(filename="../config/smythstoys_config.yaml")
-# smythstoys_quick_soup = smythstoys.quick_soup(smythstoys.prod_urls, header=smythstoys_header)
 
 
 
